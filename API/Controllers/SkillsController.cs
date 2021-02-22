@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using API.resources;
+using AutoMapper;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +13,11 @@ namespace API.Controllers
     public class SkillsController : BaseApiController
     {
         private readonly DataContext _context;
-        public SkillsController(DataContext context)
+        private readonly IMapper _mapper;
+        public SkillsController(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -26,6 +30,58 @@ namespace API.Controllers
         public async Task<ActionResult<Skill>> GetSkill(Guid id)
         {
             return await _context.Skills.FindAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Skill>> InsertSkill(Guid id, SkillResource resource)
+        {
+
+            Skill skill = await _context.Skills.FindAsync(id);
+
+            if(skill != null)
+                 Conflict(skill);
+            
+            var newSkill =  _mapper.Map<SkillResource, Skill>(resource);
+
+            newSkill.Id =  Guid.NewGuid();
+            newSkill.CreationDate = DateTime.Now;
+            newSkill.UpdateDate = DateTime.Now;
+
+            await _context.AddAsync(newSkill);
+            await _context.SaveChangesAsync();
+
+            return Ok(newSkill);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Skill>> UpdateSkill(Guid id, SkillResource resource)
+        {
+            var skill = await _context.Skills.FindAsync(id);
+
+            skill.UpdateDate = DateTime.Now;
+
+            _mapper.Map(resource, skill);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(skill);//(skill);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Skill>> DeleteSkill(Guid id)
+        {
+            // if (!ModelState.IsValid)
+            //     return BadRequest(ModelState.GetErrorMessages())
+
+            var skill = await _context.Skills.FindAsync(id);
+
+            if (skill == null)
+                return NotFound();
+
+            _context.Remove(skill);
+
+            await _context.SaveChangesAsync();
+            return Ok(skill);
         }
     }
 }

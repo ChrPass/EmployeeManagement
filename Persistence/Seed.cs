@@ -17,14 +17,14 @@ namespace Persistence
                 new Skill
                 {
                     Name = "Team Work",
-                    Details = "The ability to work in a team",
+                    Description = "The ability to work in a team",
                     CreationDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                 },
                 new Skill
                 {
                     Name = "C#",
-                    Details = ".net C#",
+                    Description = ".net C#",
                     CreationDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
                 }
