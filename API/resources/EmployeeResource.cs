@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Domain;
 
-namespace Domain
+namespace API.resources
 {
-    public class Employee
+    public class EmployeeResource
     {
         public Guid Id { get; set; }
-        
         public string Name { get; set; }
         public string Surname { get; set; }
         public string FullName { get; set; }

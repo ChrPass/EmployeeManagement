@@ -10,5 +10,13 @@ namespace Persistence
         }
 
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Employee>()
+                .HasMany(b => b.Skills)
+                .WithOne();
+        }
     }
-} 
+}
