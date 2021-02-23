@@ -33,14 +33,8 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Skill>> InsertSkill(Guid id, SkillResource resource)
-        {
-
-            Skill skill = await _context.Skills.FindAsync(id);
-
-            if(skill != null)
-                 Conflict(skill);
-            
+        public async Task<ActionResult<Skill>> InsertSkill(SkillResource resource)
+        {           
             var newSkill =  _mapper.Map<SkillResource, Skill>(resource);
 
             newSkill.Id =  Guid.NewGuid();
