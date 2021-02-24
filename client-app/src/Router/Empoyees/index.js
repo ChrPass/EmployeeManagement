@@ -1,6 +1,8 @@
+import EmployeesTable from "./Table";
+
 const Employess = () => {
     return(
-        <p>this is empl</p>
+        <EmployeesTable/>
     )
 }
 
