@@ -8,6 +8,7 @@ import NotFound from "./NotFound/index";
 import Navbar from "../common/Navbar";
 import SkillCreation from "./SkillCreation/index";
 import EmployeeCreation from "./EmployeeCreation/index";
+import EmployeeDetails from "./EmployeeDetails/index";
 
 const Router = () => {
   return (
@@ -17,7 +18,7 @@ const Router = () => {
             <Route exact path="/" component={Home} />
             <Route path="/Home" component={Home} />
             <Route exact path="/Employees" component={Employees} />
-            <Route path="/Employees/:employeeId" component={Employees} />
+            <Route path="/Employees/:employeeId" component={EmployeeDetails} />
             <Route path="/EmployeeCreation" component={EmployeeCreation} />
             <Route exact path="/Skills" component={Skills} />
             <Route path="/Skills/:skillId" component={SkillDetail} />

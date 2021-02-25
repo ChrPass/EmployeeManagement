@@ -30,63 +30,33 @@ namespace Persistence
                 }
             };
 
-            await context.Skills.AddRangeAsync(skills);
-
-            var employees = new List<Employee>
+            var employee = new Employee
             {
-                new Employee
-                {
-                    Name = "Takis",
-                    Surname = "Testakis",
-                    FullName = "Takis Testakis",
-                    CreationDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                    DateOfBirth = new DateTime(1997, 05, 09),
-                    Age = 24,
-                    Sex = "male",
-                    Skills = new List<Skill>{
-                        new Skill
-                        {
-                            Name = "C#",
-                    Description = ".net C#",
-                    CreationDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                        },
-                       new Skill {
-                    Name = "Team Work",
-                    Description = "The ability to work in a team",
-                    CreationDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                },
-                    }
-                },
-                new Employee
-                {
-                    Name = "Takis",
-                    Surname = "Testakis",
-                    FullName = "Takis Testakis",
-                    CreationDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                    DateOfBirth = new DateTime(1997, 05, 09),
-                    Age = 24,
-                    Sex = "male",
-                    Skills = new List<Skill>{
-                        new Skill
-                        {
-                            Name = "C#",
-                    Description = ".net C#",
-                    CreationDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                        },
-                       new Skill {
-                    Name = "Team Work",
-                    Description = "The ability to work in a team",
-                    CreationDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                },
-                    }
-                },
+                Name = "Takis",
+                Surname = "Testakis",
+                FullName = "Takis Testakis",
+                JobTitle = null,
+                JobDescription = null,
+                DateOfBirth = DateTime.Now,
+                Age = 24,
+                Sex = "male",
+                CreationDate = DateTime.Now,
+                UpdateDate = DateTime.Now,
+                EmployeeSkill = new List<EmployeeSkill>()
             };
+
+            skills.ForEach(item =>
+            {
+                employee.EmployeeSkill.Add(new EmployeeSkill
+                {
+                    Employee = employee,
+                    Skill = item
+                });
+            });
+
+
+            await context.Skills.AddRangeAsync(skills);
+            await context.Employees.AddRangeAsync(employee);
             await context.SaveChangesAsync();
         }
     }

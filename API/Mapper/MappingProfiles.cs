@@ -9,7 +9,9 @@ namespace API.Mapper
         public MappingProfiles()
         {
             CreateMap<SkillResource, Skill>();
+            CreateMap<Skill, SkillResource>();
             CreateMap<EmployeeResource, Employee>();
+            CreateMap<Employee, EmployeeResource>();
         }
     }
 }

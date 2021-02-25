@@ -17,6 +17,6 @@ namespace API.resources
         public string Sex { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        public ICollection<Skill> Skills { get; set; }
+        public ICollection<SkillResource> Skills { get; set; }
     }
 }

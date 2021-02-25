@@ -40,7 +40,7 @@ export default function MultipleSelectionCompo(props) {
       defaultValue={selectedData ? selectedData : []}
       isMulti
       onChange={(e) => {
-        setSelectedData([...e]);
+        setSelectedData(value => ({...value, skills: e}));
       }}
       options={data}
     />

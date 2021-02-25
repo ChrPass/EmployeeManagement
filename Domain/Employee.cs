@@ -17,6 +17,6 @@ namespace Domain
         public string Sex { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        public ICollection<Skill> Skills { get; set; }
+        public ICollection<EmployeeSkill> EmployeeSkill { get; set; }
     }
 }
