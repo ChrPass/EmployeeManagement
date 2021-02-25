@@ -44,6 +44,9 @@ namespace API.Controllers
             {
                 var tempSkill = _mapper.Map<Skill, SkillResource>(item.Skill);
 
+                tempSkill.Value = tempSkill.Id;
+                tempSkill.Label = tempSkill.Name;
+
                 employee.Skills.Add(tempSkill);
             });
 
@@ -55,10 +58,18 @@ namespace API.Controllers
         {
             var newEmployee = _mapper.Map<EmployeeResource, Employee>(resource);
             newEmployee.Id = Guid.NewGuid();
+            newEmployee.FullName = newEmployee.Name + " " + newEmployee.Surname;
             newEmployee.CreationDate = DateTime.Now;
             newEmployee.UpdateDate = DateTime.Now;
-            // string fullName = resource.Name + " " + resource.Surname;
-            // newEmployee.FullName = fullName;
+            newEmployee.Age = DateTime.Today.Year - resource.DateOfBirth.Year;
+            
+             if (resource.Skills.Count > 0)
+            {
+                foreach (var skill in resource.Skills)
+                {
+                    _context.EmployeeSkills.Add(new EmployeeSkill { EmployeeId = newEmployee.Id, SkillId = skill.Id });
+                }
+            }
 
             await _context.AddAsync(newEmployee);
             await _context.SaveChangesAsync();
@@ -76,6 +87,10 @@ namespace API.Controllers
             if (employee == null)
                 return NotFound();
 
+            _mapper.Map(resource, employee);
+            employee.FullName = employee.Name + " " + employee.Surname;
+            employee.UpdateDate = DateTime.Now;
+
             if (employee.EmployeeSkill.Count > 0)
                 _context.EmployeeSkills.RemoveRange(employee.EmployeeSkill);
 
@@ -84,12 +99,25 @@ namespace API.Controllers
                 foreach (var skill in resource.Skills)
                 {
                     _context.EmployeeSkills.Add(new EmployeeSkill { EmployeeId = employee.Id, SkillId = skill.Id });
-
                 }
             }
 
             await _context.SaveChangesAsync();
 
+            return Ok(employee);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Employee>> DeleteEmployee(Guid id)
+        {
+            Employee employee = await _context.Employees.FindAsync(id);
+
+            if (employee == null)
+                return NotFound();
+
+            _context.Remove(employee);
+
+            await _context.SaveChangesAsync();
             return Ok(employee);
         }
     }

@@ -2,13 +2,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
-import skillValidation from "../../utils/validateNewSkill";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import AppBarComp from "./Toolbar";
 import MultSelectionComp from "../../common/SkillsSelector";
+import SexSelector from "../../common/SexSelector";
+import employeeValidation from "../../utils/validateNewEmployee";
 
 const useStyles = makeStyles((theme) => ({
   boxStyle: {
@@ -24,21 +25,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SkillCreation = () => {
+
+const EmployeeCreation = () => {
   const [details, setDetails] = useState({});
   const [errors, setErrors] = useState({});
   let history = useHistory();
   const classes = useStyles();
 
-  const createNewSkill = () => {
-    var res = skillValidation(details);
-
+  const createNewEmployee = () => {
+    var res = employeeValidation(details);
     if (res.errors) {
       setErrors({ ...res.errors });
       return;
     }
-
-    const param = { name: details.name, description: details.description };
 
     Axios({
       method: "post",
@@ -51,7 +50,7 @@ const SkillCreation = () => {
       params: details,
       transformRequest: [
         function () {
-          return JSON.stringify(param);
+          return JSON.stringify(details);
         },
       ],
     })
@@ -79,10 +78,10 @@ const SkillCreation = () => {
         className={classes.boxStyle}
       >
         <Box style={{ width: "100%" }}>
-          <AppBarComp createNewSkill={createNewSkill} />
+          <AppBarComp createNewEmployee={createNewEmployee} />
           <form noValidate>
             <Grid container spacing={2} className={classes.grid}>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <TextField
                   autoComplete="name"
                   name="name"
@@ -93,31 +92,86 @@ const SkillCreation = () => {
                   label="Name"
                   autoFocus
                   onChange={handleFieldChange}
-                  value={details.name}
-                  multiline
+                  value={details.name ?? ""}
                   error={Boolean(errors.name)}
                   helperText={errors.name ? errors.name : ""}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <TextField
-                  autoComplete="descript"
-                  name="description"
+                  autoComplete="surname"
+                  name="surname"
                   variant="outlined"
                   required
                   fullWidth
-                  id="description"
-                  label="Description"
+                  id="surname"
+                  label="Surname"
                   autoFocus
                   onChange={handleFieldChange}
-                  value={details.description}
-                  multiline
-                  error={Boolean(errors.description)}
-                  helperText={errors.description ? errors.description : ""}
+                  value={details.surname ?? ""}
+                  error={Boolean(errors.surname)}
+                  helperText={errors.surname ? errors.surname : ""}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <SexSelector selected={details.sex} setSelected={setDetails}/>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  label="Birthday"
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  value={details.dateOfBirth ? details.dateOfBirth : ""}
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={Boolean(errors.dateOfBirth)}
+                  helperText={errors.dateOfBirth ? errors.dateOfBirth : ""}
+                  onChange={handleFieldChange}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  autoComplete="jobTitle"
+                  name="jobTitle"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="jobTitle"
+                  label="Job Title"
+                  autoFocus
+                  onChange={handleFieldChange}
+                  value={details.jobTitle ?? ""}
+                  error={Boolean(errors.jobTitle)}
+                  helperText={errors.jobTitle ? errors.jobTitle : ""}
                 />
               </Grid>
               <Grid item xs={12}>
-                <MultSelectionComp/>
+                <TextField
+                  autoComplete="jobDescription"
+                  name="jobDescription"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="jobDescription"
+                  label="Job Description"
+                  autoFocus
+                  onChange={handleFieldChange}
+                  value={details.jobDescription ?? ""}
+                  multiline
+                  error={Boolean(errors.jobDescription)}
+                  helperText={errors.jobDescription ? errors.jobDescription : ""}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <MultSelectionComp
+                  setSelectedData={setDetails}
+                  selectedData={details.skills}
+                />
               </Grid>
             </Grid>
           </form>
@@ -127,4 +181,4 @@ const SkillCreation = () => {
   );
 };
 
-export default SkillCreation;
+export default EmployeeCreation;

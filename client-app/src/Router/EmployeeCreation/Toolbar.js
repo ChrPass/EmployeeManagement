@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AppBarComp(props) {
-  const { createNewSkill } = props;
+  const { createNewEmployee } = props;
   const classes = useStyles();
 
   return (
@@ -36,7 +36,7 @@ export default function AppBarComp(props) {
         <Typography variant="h6" className={classes.title}>
             Create New Employee
           </Typography>
-          <Button color="inherit" className={classes.rightToolbar} onClick={createNewSkill}>
+          <Button color="inherit" className={classes.rightToolbar} onClick={createNewEmployee}>
             Save
           </Button>
         </Toolbar>

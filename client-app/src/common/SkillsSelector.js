@@ -5,7 +5,7 @@ import makeAnimated from "react-select/animated";
 
 const animatedComponents = makeAnimated();
 
-export default function MultipleSelectionCompo(props) {
+const MultipleSelectionCompo = React.memo((props) => {
   const { selectedData, setSelectedData } = props;
   const  [data, setData] = useState([]);
   const getSkills = async () => {
@@ -18,6 +18,7 @@ export default function MultipleSelectionCompo(props) {
       },
     })
       .then((res) => {
+ 
         res.data.map(item => {
           item.value = item.id;
           item.label = item.name;
@@ -37,7 +38,7 @@ export default function MultipleSelectionCompo(props) {
     <Select
       closeMenuOnSelect={false}
       components={animatedComponents}
-      defaultValue={selectedData ? selectedData : []}
+      value={selectedData ? selectedData : []}
       isMulti
       onChange={(e) => {
         setSelectedData(value => ({...value, skills: e}));
@@ -45,4 +46,6 @@ export default function MultipleSelectionCompo(props) {
       options={data}
     />
   );
-}
+})
+
+export default MultipleSelectionCompo;

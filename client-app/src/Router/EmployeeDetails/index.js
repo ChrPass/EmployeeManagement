@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -27,6 +28,7 @@ const EmployeeDetails = (props) => {
   const { match, location } = props;
   const [details, setDetails] = useState({});
   const employeeId = match.params.employeeId;
+  let history = useHistory();
   const classes = useStyles();
 
   const getEmployee = () => {
@@ -57,6 +59,8 @@ const EmployeeDetails = (props) => {
   };
 
   const handleUpdate = (e) => {
+    e.preventDefault();
+
     Axios({
       method: "put",
       url: `${process.env.REACT_APP_API_PATH}Employee/${employeeId}`,
@@ -75,6 +79,7 @@ const EmployeeDetails = (props) => {
   };
 
   const handleDelete = (e) => {
+    e.preventDefault();
     Axios({
       method: "delete",
       url: `${process.env.REACT_APP_API_PATH}Employee/${employeeId}`,
@@ -85,6 +90,7 @@ const EmployeeDetails = (props) => {
     })
       .then((res) => {
         alert("Ok");
+        history.push(`/Employees`);
       })
       .catch((err) => {
         alert("Something went wrong. Please try again.");
@@ -202,7 +208,6 @@ const EmployeeDetails = (props) => {
             <Box display="flex" width={1}>
               <Box width="100%">
                 <Button
-                  type="submit"
                   variant="contained"
                   color="primary"
                   className={classes.submit}
@@ -213,7 +218,6 @@ const EmployeeDetails = (props) => {
               </Box>
               <Box flexShrink={1}>
                 <Button
-                  type="submit"
                   variant="contained"
                   color="secondary"
                   className={classes.submit}

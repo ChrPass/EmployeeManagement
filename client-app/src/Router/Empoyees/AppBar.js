@@ -30,7 +30,7 @@ export default function AppBarComp() {
       <AppBar position="static">
         <Toolbar>
           <Box className={classes.rightToolbar}>
-            <Button color="inherit" onClick={() => history.push(`/EmployeeCreation`)}>Create Skill</Button>
+            <Button color="inherit" onClick={() => history.push(`/EmployeeCreation`)}>Create Employee</Button>
           </Box>
         </Toolbar>
       </AppBar>
