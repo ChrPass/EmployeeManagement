@@ -11,7 +11,7 @@ export const employeeValidation = (data) => {
     skills,
   } = data;
   const errors = {};
-  debugger;
+
   if (_.isEmpty(name)) {
     errors.name = "Name is mandatory field";
   }

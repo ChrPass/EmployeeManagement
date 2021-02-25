@@ -10,6 +10,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  appBar: {
+    background: "#ececf1 !important",
+    color: "#000000 !important"
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -27,7 +31,7 @@ export default function AppBarComp() {
   let history = useHistory();
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <Box className={classes.rightToolbar}>
             <Button color="inherit" onClick={() => history.push(`/SkillCreation`)}>Create Skill</Button>

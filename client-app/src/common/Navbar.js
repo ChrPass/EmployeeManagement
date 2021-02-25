@@ -34,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    background: "#ececf1",
+    color: "#000000"
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -53,8 +55,11 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
+    
   },
   drawerOpen: {
+    background: "#333547",
+
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -62,6 +67,8 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   drawerClose: {
+    background: "#333547",
+
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -87,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerItem: {
     textDecoration: "none",
-    color: "#000000",
+    color: "#b4c9de",
   },
 }));
 
@@ -155,9 +162,9 @@ export default function Navbar(props) {
         <div className={classes.toolbar}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
+              <ChevronRightIcon className={classes.drawerItem}/>
             ) : (
-              <ChevronLeftIcon />
+              <ChevronLeftIcon className={classes.drawerItem}/>
             )}
           </IconButton>
         </div>
@@ -166,7 +173,7 @@ export default function Navbar(props) {
           <List>
             <ListItem button key={"home"}>
               <ListItemIcon>
-                <HomeIcon />
+                <HomeIcon className={classes.drawerItem}/>
               </ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItem>
@@ -176,7 +183,7 @@ export default function Navbar(props) {
           <List>
             <ListItem button key={"empoyees"}>
               <ListItemIcon>
-                <PeopleAltIcon />
+                <PeopleAltIcon className={classes.drawerItem}/>
               </ListItemIcon>
               <ListItemText primary={"Employees"} />
             </ListItem>
@@ -185,7 +192,7 @@ export default function Navbar(props) {
         <Link to="/Skills" className={classes.drawerItem}>
           <List>
             <ListItem button key={"skills"}>
-              <ListItemIcon>
+              <ListItemIcon className={classes.drawerItem}>
                 <BrushIcon />
               </ListItemIcon>
               <ListItemText primary={"Skills"} />

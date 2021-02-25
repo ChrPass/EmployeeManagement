@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
+import _ from "lodash";
 import Axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
@@ -28,8 +30,12 @@ const useStyles = makeStyles({
 export default function SkillsTable() {
   const classes = useStyles();
   const [employees, setEmployees] = useState([]);
+  const [order, setOrder] = useState('asc');
   let history = useHistory();
 
+  const orderData = (data) => {
+    return _.orderBy(data, ['fullName'],[order]);
+  }
   const getEmployees = async () => {
     await Axios({
       method: "get",
@@ -40,7 +46,7 @@ export default function SkillsTable() {
       },
     })
       .then((res) => {
-        setEmployees(res.data);
+        setEmployees(orderData(res.data));
       })
       .catch((err) => {
         alert("Something went wrong. Please try again.");
@@ -50,6 +56,12 @@ export default function SkillsTable() {
   useEffect(() => {
     getEmployees();
   }, []);
+
+
+useEffect(() => {
+    setEmployees(orderData(employees));
+  }, [order]);
+
 
   const handleDetailsRedirection = (e, id) => {
     history.push(`/Employees/${id}`);
@@ -62,7 +74,15 @@ export default function SkillsTable() {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Full Name</TableCell>
+              <TableCell   sortDirection={order}>
+              <TableSortLabel
+              active={true}
+              direction={order}
+              onClick={() => setOrder(order == "asc" ? "desc" : "asc")}
+            >
+              Full Name
+              </TableSortLabel>
+              </TableCell>
               <TableCell align="left">Job Title</TableCell>
               <TableCell align="center" />
             </TableRow>
@@ -71,7 +91,9 @@ export default function SkillsTable() {
             {employees.map((row) => (
               <TableRow key={row.id} hover>
                 <TableCell component="th" scope="row">
+                
                   {row.fullName}
+                  
                 </TableCell>
                 <TableCell align="left">{row.jobTitle}</TableCell>
                 <TableCell align="right">
