@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import Box from "@material-ui/core/Box";
@@ -9,6 +9,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import SkillsSelector from "../../common/SkillsSelector";
+import SexSelector from "../../common/SexSelector";
+import {SnackBarContext} from "../../hoc/SnackBarProvider";
 
 const useStyles = makeStyles((theme) => ({
   boxStyle: {
@@ -29,6 +31,7 @@ const EmployeeDetails = (props) => {
   const [details, setDetails] = useState({});
   const employeeId = match.params.employeeId;
   let history = useHistory();
+  const snackbar = useContext(SnackBarContext);
   const classes = useStyles();
 
   const getEmployee = () => {
@@ -42,11 +45,11 @@ const EmployeeDetails = (props) => {
     })
       .then((res) => {
         if (!res.data) return;
+        console.log(res.data)
         setDetails(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
-        alert("Something went wrong. Please try again.");
+        snackbar("Something went wrong. Please try again.", "error");
       });
   };
 
@@ -71,10 +74,10 @@ const EmployeeDetails = (props) => {
       data: details,
     })
       .then((res) => {
-        alert("Ok");
+        snackbar("Successful Transaction");
       })
       .catch((err) => {
-        alert("Something went wrong. Please try again.");
+        snackbar("Something went wrong. Please try again.", "error");
       });
   };
 
@@ -89,11 +92,11 @@ const EmployeeDetails = (props) => {
       },
     })
       .then((res) => {
-        alert("Ok");
+        snackbar("Successful Transaction");
         history.push(`/Employees`);
       })
       .catch((err) => {
-        alert("Something went wrong. Please try again.");
+        snackbar("Something went wrong. Please try again.", "error");
       });
   };
 
@@ -141,18 +144,7 @@ const EmployeeDetails = (props) => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  autoComplete="sex"
-                  name="sex"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="sex"
-                  label="Sex"
-                  autoFocus
-                  onChange={handleFieldChange}
-                  value={details.sex ?? ""}
-                />
+                <SexSelector selected={details.sex} setSelected={setDetails} />
               </Grid>
               <Grid item xs={6}>
                 <TextField
@@ -167,6 +159,7 @@ const EmployeeDetails = (props) => {
                   onChange={handleFieldChange}
                   value={details.age ?? ""}
                   type="number"
+                  disabled
                 />
               </Grid>
               <Grid item xs={6}>

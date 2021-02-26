@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
@@ -13,6 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import AppBarComp from "./AppBar";
+import {SnackBarContext} from "../../hoc/SnackBarProvider";
 
 const useStyles = makeStyles({
   table: {
@@ -32,6 +33,7 @@ export default function SkillsTable() {
   const [employees, setEmployees] = useState([]);
   const [order, setOrder] = useState('asc');
   let history = useHistory();
+  const snackbar = useContext(SnackBarContext);
 
   const orderData = (data) => {
     return _.orderBy(data, ['fullName'],[order]);
@@ -49,7 +51,7 @@ export default function SkillsTable() {
         setEmployees(orderData(res.data));
       })
       .catch((err) => {
-        alert("Something went wrong. Please try again.");
+        snackbar("Something went wrong. Please try again.", "error");
       });
   };
 

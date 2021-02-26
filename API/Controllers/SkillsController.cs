@@ -33,11 +33,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Skill>> InsertSkill(SkillResource resource)
-        {           
-            var newSkill =  _mapper.Map<SkillResource, Skill>(resource);
-
-            newSkill.Id =  Guid.NewGuid();
+        public async Task<ActionResult<Skill>> InsertSkill(SkillInsertUpdateResource resource)
+        {
+            var newSkill = _mapper.Map<SkillInsertUpdateResource, Skill>(resource);
+            
+            newSkill.Id = Guid.NewGuid();
             newSkill.CreationDate = DateTime.Now;
             newSkill.UpdateDate = DateTime.Now;
 
@@ -48,9 +48,12 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Skill>> UpdateSkill(Guid id, SkillResource resource)
+        public async Task<ActionResult<Skill>> UpdateSkill(Guid id, SkillInsertUpdateResource resource)
         {
             var skill = await _context.Skills.FindAsync(id);
+
+            if (skill == null)
+                return NotFound();
 
             skill.UpdateDate = DateTime.Now;
 

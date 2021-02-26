@@ -1,5 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";  
+import moment from "moment";
 import Axios from "axios";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -7,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import {SnackBarContext} from "../../hoc/SnackBarProvider";
 
 const useStyles = makeStyles((theme) => ({
   boxStyle: {
@@ -26,7 +29,9 @@ const SkillDetail = (props) => {
   const { match, location } = props;
   const [details, setDetails] = useState({});
   const skillId = match.params.skillId;
+  let history = useHistory();
   const classes = useStyles();
+  const snackbar = useContext(SnackBarContext);
 
   const getSkillDetails = () => {
     Axios({
@@ -39,10 +44,11 @@ const SkillDetail = (props) => {
     })
       .then((res) => {
         if (!res.data) return;
+        console.log(res.data)
         setDetails(res.data);
       })
       .catch((err) => {
-        alert("Something went wrong. Please try again.");
+        snackbar("Something went wrong. Please try again.", "error");
       });
   };
 
@@ -68,10 +74,10 @@ const SkillDetail = (props) => {
         }
       })
         .then((res) => {
-          alert("Ok");
+          snackbar("Successful Transaction");
         })
         .catch((err) => {
-          alert("Something went wrong. Please try again.");
+          snackbar("Something went wrong. Please try again.", "error");
         });
   } 
 
@@ -85,10 +91,11 @@ const SkillDetail = (props) => {
         },
       })
         .then((res) => {
-          alert("Ok");
+          snackbar("Successful Transaction");
+          history.push(`/Skills`);
         })
         .catch((err) => {
-          alert("Something went wrong. Please try again.");
+          snackbar("Something went wrong. Please try again.", "error");
         });
   } 
 
@@ -118,15 +125,30 @@ const SkillDetail = (props) => {
                   label="Description"
                   autoFocus
                   onChange={handleFieldChange}
-                  value={details.description}
+                  value={details.description ? details.description : ""}
                   multiline
+                />
+              </Grid>
+              <Grid item xs={6}>
+              <TextField
+                  id="updateDate"
+                  name="updateDate"
+                  label="Last Update Date"
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  value={details.updateDate ? moment(details.updateDate).format("YYYY-MM-DD") : ""}
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
                 />
               </Grid>
             </Grid>
             <Box display="flex" width={1}>
                 <Box width="100%"> 
             <Button
-            type="submit"
             variant="contained"
             color="primary"
             className={classes.submit}
@@ -138,7 +160,6 @@ const SkillDetail = (props) => {
           </Box>
           <Box flexShrink={1}>
             <Button
-            type="submit"
             variant="contained"
             color="secondary"
             className={classes.submit}

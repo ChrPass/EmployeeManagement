@@ -90,6 +90,7 @@ namespace API.Controllers
             _mapper.Map(resource, employee);
             employee.FullName = employee.Name + " " + employee.Surname;
             employee.UpdateDate = DateTime.Now;
+            employee.Age = DateTime.Today.Year - employee.DateOfBirth.Year;
 
             if (employee.EmployeeSkill.Count > 0)
                 _context.EmployeeSkills.RemoveRange(employee.EmployeeSkill);

@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import Box from "@material-ui/core/Box";
@@ -10,6 +10,7 @@ import AppBarComp from "./Toolbar";
 import MultSelectionComp from "../../common/SkillsSelector";
 import SexSelector from "../../common/SexSelector";
 import employeeValidation from "../../utils/validateNewEmployee";
+import {SnackBarContext} from "../../hoc/SnackBarProvider";
 
 const useStyles = makeStyles((theme) => ({
   boxStyle: {
@@ -30,6 +31,7 @@ const EmployeeCreation = () => {
   const [details, setDetails] = useState({});
   const [errors, setErrors] = useState({});
   let history = useHistory();
+  const snackbar = useContext(SnackBarContext);
   const classes = useStyles();
 
   const createNewEmployee = () => {
@@ -56,11 +58,11 @@ const EmployeeCreation = () => {
     })
       .then((res) => {
         if (!res.data) return;
-        alert("Ok");
+        snackbar("Successful Transaction");
         history.push(`/Employees`);
       })
       .catch(() => {
-        alert("Something went wrong. Please try again.");
+        snackbar("Something went wrong. Please try again.");
       });
   };
 

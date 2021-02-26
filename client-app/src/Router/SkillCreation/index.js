@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import skillValidation from "../../utils/validateNewSkill";
@@ -8,6 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import AppBarComp from "./Toolbar";
+import {SnackBarContext} from "../../hoc/SnackBarProvider";
 
 const useStyles = makeStyles((theme) => ({
   boxStyle: {
@@ -28,6 +29,7 @@ const SkillCreation = () => {
   const [errors, setErrors] = useState({});
   let history = useHistory();
   const classes = useStyles();
+  const snackbar = useContext(SnackBarContext);
 
   const createNewSkill = () => {
     var res = skillValidation(details);
@@ -59,11 +61,11 @@ const SkillCreation = () => {
     })
       .then((res) => {
         if (!res.data) return;
-        alert("Ok");
+        snackbar("Successful Transaction");
         history.push(`/Skills`);
       })
       .catch(() => {
-        alert("Something went wrong. Please try again.");
+        snackbar("Something went wrong. Please try again.", "error");
       });
   };
 

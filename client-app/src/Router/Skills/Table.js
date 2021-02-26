@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
@@ -11,6 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import {SnackBarContext} from "../../hoc/SnackBarProvider";
 
 const useStyles = makeStyles({
   table: {
@@ -28,7 +29,9 @@ const useStyles = makeStyles({
 export default function SkillsTable() {
   const classes = useStyles();
   const [skillList, setSkillList] = useState([]);
+  const snackbar = useContext(SnackBarContext);
   let history = useHistory();
+
   const getSkills = async () => {
     await Axios({
       method: "get",
@@ -42,8 +45,8 @@ export default function SkillsTable() {
         setSkillList(res.data);
       })
       .catch((err) => {
-        alert("Something went wrong. Please try again.");
-      });
+        snackbar("Something went wrong. Please try again.", "error");
+      })
   };
 
   useEffect(() => {

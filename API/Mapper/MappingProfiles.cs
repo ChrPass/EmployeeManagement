@@ -10,6 +10,7 @@ namespace API.Mapper
         {
             CreateMap<SkillResource, Skill>();
             CreateMap<Skill, SkillResource>();
+            CreateMap<SkillInsertUpdateResource, Skill>();
             CreateMap<EmployeeResource, Employee>();
             CreateMap<Employee, EmployeeResource>();
         }
